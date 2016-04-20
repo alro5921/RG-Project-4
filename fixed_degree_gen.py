@@ -29,7 +29,7 @@ def gen_fixed_degree_graph(n, dist = None):
     return g_d
         
     
-def pick_nodes(degrees):
+def pick_nodes(degrees): #I feel there's a better way of doing this
     D = sum(degrees)
     while(True):
         index1, index2 = r.randint(1,D), r.randint(1,D)
