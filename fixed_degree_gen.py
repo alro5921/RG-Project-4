@@ -13,7 +13,7 @@ def gen_fixed_degree_graph(n, dist = None):
         d_n = int(dist())
         if (sub_d_is_odd == d_n % 2): #both odd or both even
             degrees.append(d_n)
-            break;    
+            break    
     
     g_d = np.zeros((n,n))
     D = sum(degrees)
