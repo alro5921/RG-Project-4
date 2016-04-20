@@ -34,7 +34,7 @@ def pick_nodes(degrees): #I feel there's a better way of doing this
     while(True):
         index1, index2 = r.randint(1,D), r.randint(1,D)
         if (index1 != index2):
-            break;
+            break
  
     found1, found2 = False, False
     t = 0
