@@ -3,18 +3,15 @@ import numpy as np
 
 def gen_fixed_degree_graph(n, dist = None):
     if dist is None:
-        dist = lambda : np.random.binomial(5, .2)
-    degrees = []
-    for _ in range(n-1):
-        degrees.append(int(dist()))
+        dist = lambda : np.random.binomial(5, .2) 
         
-    sub_d_is_odd = sum(degrees) % 2
-    while (True):
-        d_n = int(dist())
-        if (sub_d_is_odd == d_n % 2): #both odd or both even
-            degrees.append(d_n)
-            break    
-    
+    while(True):
+        degrees = []
+        for _ in range(n):
+            degrees.append(int(dist()))
+        if sum(degrees) % 2 == 0:
+            break  
+
     g_d = np.zeros((n,n))
     D = sum(degrees)
     while (D > 0):
@@ -29,7 +26,7 @@ def gen_fixed_degree_graph(n, dist = None):
     return g_d
         
     
-def pick_nodes(degrees): #I feel there's a better way of doing this
+def pick_nodes(degrees):
     D = sum(degrees)
     while(True):
         index1, index2 = r.randint(1,D), r.randint(1,D)
