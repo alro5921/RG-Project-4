@@ -4,7 +4,7 @@
 \usepackage[]{algorithm2e}
 
 \title{Random Graphs Project 4}
-\author{Alex Rose, Pedro}
+\author{Alex Rose, Pedro Rodriguez}
 \date{April 2016}
 
 \begin{document}
@@ -21,7 +21,7 @@ $$ = (2p-1)P(E_{n-1}) + (1 - p), P(E_0) = p$$
 \subsection{} 
 Let $f(x) = (2p -1)x + (1-p)$. Note that for any real $x_1,x_0$:
 $$|f(x_1) - f(x_0)| = |(2p-1)x_1 + (1-p) - (2p-1)x_0 - (1-p)| = |(2p-1)(x_1-x_0)|$$
-This quantity is strictly less than $|x_1-x_0|$ if $0 < p < 1$, so f(x) is a contraction on that interval. So by the Contraction Mapping Theorem, the recursion will converge to f(x)'s unique fixed point on $0 < p < 1$ .   Solving for this fixed point:
+This quantity is strictly less than $|x_1-x_0|$ if $0 < p < 1$, so f(x) is a contraction on that interval. So by the Contraction Mapping Theorem, the recursion will converge to f(x)'s unique fixed point on $0 < p < 1$ .  Solving for this fixed point:
 $$x = (2p-1)x + (1-p)$$
 $$2x - 2px = 1-p$$
 $$x = \frac{1-p}{2(1-p)} = 1/2$$
@@ -32,12 +32,50 @@ So $\lim_{n\to\infty} P(E_{n})= x = 1/2$
 Uh, each step of the process removes 2 "degrees" from the degree list to form 1 edge. We have D degrees, so this process will form $D/2$ edges in total.
 
 \subsection{}
-I have a solution for this, but I'm uneasy about it. I'm pretty sure they're equilvent, but give me a day to look at it.
+%I'm unhappy with this section. I provide a counterexample, but no actual insight on why the two SHOULD be different. 
+The procedures are \textit{not} equivalent. Consider a three node graph with a Bernoulli fixed degree distribution:
+
+$$p_k = \begin{cases}
+  p & \text{if } k = 0 \\
+  1-p & \text{if } k = 1 \\
+  0 & \text{else}
+\end{cases}$$
+
+With this graph and degree distribution, the probabilities of generating an unconnected graph (all three degrees are 0) are different between the two procedures. \\
+
+\textbf{First procedure}: By construction, $P(000| E)$ is the probability the first procedure generates the unordered degree list $(0,0,0)$. By Bayes Theorem we have:
+
+$$P(000|E) = \frac{P(E|000)P(000)}{P(E)}$$
+
+$P(E)$ is given by the sum of the even degree probabilities, $P(000)$ and $011$, so:
+
+$$P(000|E) = \frac{P(000)}{P(000) + P(011)} = \frac{p^3}{p^3 + \binom{3}{1}p(1-p)^2} = \frac{p^3}{p^3 + 3p(1-p)^2}$$
+
+\textbf{Second Procedure}: This procedure freely generates two degrees, and then forces the third degree to make the sum of all three degrees even. Note the only way to generate 000 is to have the two free values be 00. If that happens, then the third value must be 0 to preserve eveness. And so the probability of the second procedure generating (000) is the probability it generates the free degrees 00, which is $p^2$. \\
+
+$p^2$ is not uniformly equal to $\frac{p^3}{p^3 + 3p(1-p)^2}$ on $0 < p < 1$, and so the two procedures are not equivalent here.
+
 
 \subsection{} 
 
 \begin{algorithm}[H]
-psuedo coder;
+ initialize an NxN matrix Edges and an N length vector Degrees\;
+ \While{Degrees is unset}{
+ run simulate(d) for the n degree values in Degrees\;
+  \If{sum of the degree values is even}{
+	set Degrees to the generated degree values  \;
+	\#(And exit the loop)
+   }
+ }
+T = sum of all degrees in Degrees\;
+\While{T \textgreater 0}{
+	M, P = two nodes picked at random and weighted by their degree\;
+	Form (M, P) by incrementing the corresponding values in Edges\;
+	Decrement the Nth and Mth value in Degrees\;
+	Decrement T by 2\;
+ }
+\Return Edges
+
 \end{algorithm}
 
 \subsection{}
