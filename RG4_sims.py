@@ -1,7 +1,7 @@
 import random as r
 import numpy as np
 import scipy
-import fixed_degree as fd
+import fixed_degree_gen as fd
 
 def sim21(trials, g_size, dist = None):
     if dist is None:
