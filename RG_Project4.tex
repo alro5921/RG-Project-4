@@ -33,27 +33,8 @@ Uh, each step of the process removes 2 "degrees" from the degree list to form 1 
 
 \subsection{}
 %I'm unhappy with this section. I provide a counterexample, but no actual insight on why the two SHOULD be different. 
-The procedures are \textit{not} equivalent. Consider a three node graph with a Bernoulli fixed degree distribution:
-
-$$p_k = \begin{cases}
-  p & \text{if } k = 0 \\
-  1-p & \text{if } k = 1 \\
-  0 & \text{else}
-\end{cases}$$
-
-With this graph and degree distribution, the probabilities of generating an unconnected graph (all three degrees are 0) are different between the two procedures. \\
-
-\textbf{First procedure}: By construction, $P(000| E)$ is the probability the first procedure generates the unordered degree list $(0,0,0)$. By Bayes Theorem we have:
-
-$$P(000|E) = \frac{P(E|000)P(000)}{P(E)}$$
-
-$P(E)$ is given by the sum of the even degree probabilities, $P(000)$ and $011$, so:
-
-$$P(000|E) = \frac{P(000)}{P(000) + P(011)} = \frac{p^3}{p^3 + \binom{3}{1}p(1-p)^2} = \frac{p^3}{p^3 + 3p(1-p)^2}$$
-
-\textbf{Second Procedure}: This procedure freely generates two degrees, and then forces the third degree to make the sum of all three degrees even. Note the only way to generate 000 is to have the two free values be 00. If that happens, then the third value must be 0 to preserve eveness. And so the probability of the second procedure generating (000) is the probability it generates the free degrees 00, which is $p^2$. \\
-
-$p^2$ is not uniformly equal to $\frac{p^3}{p^3 + 3p(1-p)^2}$ on $0 < p < 1$, and so the two procedures are not equivalent here.
+\subsection{}
+With the first procedure, the probability of any degree being even is $p$ for large $n$ \footnote{handwave handwave handwave}. The second procedure generates an unrestricted $n-1$ sized degree list; each of these degrees will be even with exactly probability $p$, and their sum will be even with probability $1/2$ for large $n$. But the final restricted degree must match the eveness of the unrestricted degrees' sum, so it'll be even with probability $1/2$ \textit{regardless of p}. This restricted degree can a different distribution than the degrees in procedure (and will if $p \ne 1/2$), and so the two procedures are not equivalent.
 
 
 \subsection{} 
