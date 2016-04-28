@@ -32,7 +32,7 @@ So $\lim_{n\to\infty} P(E_{n})= x = 1/2$
 Uh, each step of the process removes 2 "degrees" from the degree list to form 1 edge. We have D degrees, so this process will form $D/2$ edges in total.
 
 \subsection{}
-With the first procedure, the probability of any degree being even is $p$ for large $n$ \footnote{handwave handwave handwave}. The second procedure generates an unrestricted $n-1$ sized degree list; each of these degrees will be even with exactly probability $p$, and their sum will be even with probability $1/2$ for large $n$. But the final restricted degree must match the eveness of the unrestricted degrees' sum, so it'll be even with probability $1/2$ \textit{regardless of p}. This restricted degree can a different distribution than the degrees in procedure (and will if $p \ne 1/2$), and so the two procedures are not equivalent.
+With the first procedure, the probabilities of a degree being even are identical between all degrees. The second procedure generates an unrestricted $n-1$ sized degree list; each of these degrees will be even with exactly probability $p$, and their sum will be even with probability $1/2$ for large $n$. But the final restricted degree must match the parity of the unrestricted degrees' sum, so it'll be even with probability $1/2$ \textit{regardless of p}. So the probabilities of a degree being even are not neccesarily identical between all degrees, and thus the two procedures aren't equivalent. 
 
 
 \subsection{} 
