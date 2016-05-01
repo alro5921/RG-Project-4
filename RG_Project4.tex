@@ -27,14 +27,19 @@ $$ = (2p-1)P(E_{n-1}) + (1 - p), P(E_0) = p$$
 \vspace{-6ex}
 \subsection{} 
 \vspace{-2ex}
-Let $f(x) = (2p -1)x + (1-p)$. Note that for any real $x_1,x_0$:
-$$|f(x_1) - f(x_0)| = |(2p-1)x_1 + (1-p) - (2p-1)x_0 - (1-p)| = |(2p-1)(x_1-x_0)|$$
-This quantity is strictly less than $|x_1-x_0|$ if $0 < p < 1$, so f(x) is a contraction on that interval. So by the Contraction Mapping Theorem, the recursion will converge to f(x)'s unique fixed point on $0 < p < 1$ .  Solving for this fixed point:
-$$x = (2p-1)x + (1-p)$$
-$$2x - 2px = 1-p$$
-$$x = \frac{1-p}{2(1-p)} = 1/2$$
+$$
+\begin{aligned}
+P(E_n)&=f(n)=(2p-1)f(n-1)+1-p\\
+r&=2p-1&\text{Characteristic function}\\
+f_g(n)&=a(2p-1)^n&\text{General solution}\\
+f(n)&=c=(2p-1)c+1-p=2pc-c+1-p=\frac{1}{2}\\
+f(n)&=a(2p-a)^n+\frac{1}{2}\\
+f(0)&=p=1+\frac{1}{2},a=p-\frac{1}{2}\\
+f(n)&=P(E_n)=(p-1/2)(2p-1)^n+\frac{1}{2}
+\end{aligned}
+$$
+Since $0<p<1$, $2p<2$ which implies that $2p-1<1$. From there we see $\lim_{n\rightarrow\infty}(p-1/2)(2p-1)^n+\frac{1}{2}=\frac{1}{2}$
 
-So $\lim_{n\to\infty} P(E_{n})= x = 1/2$
 \vspace{-2ex}
 \subsection{}
 \vspace{-2ex}
