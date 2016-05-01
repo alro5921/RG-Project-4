@@ -1,46 +1,99 @@
 import random as r
 import numpy as np
+from functools import reduce
+from enum import Enum
+from collections import defaultdict
 
-def gen_fixed_degree_graph(n, dist = None):
-    if dist is None:
-        dist = lambda : np.random.binomial(5, .2) 
-        
-    while(True):
-        degrees = []
-        for _ in range(n):
-            degrees.append(int(dist()))
-        if sum(degrees) % 2 == 0:
-            break  
+from scipy.stats import poisson
+from scipy.special import binom
+import matplotlib.pyplot as plt
+import click
 
-    g_d = np.zeros((n,n))
-    D = sum(degrees)
-    while (D > 0):
-        n1, n2 = pick_nodes(degrees)
-        g_d[n1,n2] += 1
-        g_d[n2,n1] += 1
-        degrees[n1] -= 1
-        degrees[n2] -= 1
-        D -= 2
-    for i in range(n):
-        g_d[i,i] /= 2 #Each self loop is counted twice in the above
+
+class Dist(Enum):
+    binomial = 1
+    geometric = 2
+
+
+def gen_fixed_degree_graph(dist, n):
+    if dist == Dist.binomial:
+        dist = lambda: np.random.binomial(5, .5, size=n)
+    elif dist == Dist.geometric:
+        dist = lambda: np.random.geometric(.4, size=n)
+
+    degrees = None
+    while degrees is None or np.sum(degrees) % 2 != 0:
+        degrees = dist()
+
+    g_d = np.zeros((n, n))
+    half_edges = reduce(lambda x, y: x + y, [[i] * degrees[i] for i in range(n)])
+    r.shuffle(half_edges)
+    while len(half_edges) > 0:
+        u = half_edges.pop()
+        v = half_edges.pop()
+        if u == v:
+            g_d[u, v] += 1
+        else:
+            g_d[u, v] += 1
+            g_d[v, u] += 1
     return g_d
-        
-    
-def pick_nodes(degrees):
-    D = sum(degrees)
-    while(True):
-        index1, index2 = r.randint(1,D), r.randint(1,D)
-        if (index1 != index2):
-            break
- 
-    found1, found2 = False, False
-    t = 0
-    for i, degree in enumerate(degrees):
-        t = t + degree
-        if t >= index1 and not found1:
-            n1 = i
-            found1 = True
-        if t >= index2 and not found2:
-            n2 = i
-            found2 = True
-    return n1,n2
+
+
+def count_loops(g):
+    n = len(g)
+    loops = 0
+    for i in range(n):
+        loops += g[i, i]
+    return loops
+
+
+def count_parallel_edges(g):
+    n = len(g)
+    parallel = 0
+    for i in range(n):
+        for j in range(i, n):
+            parallel += int(binom(g[i, j], 2))
+    return parallel
+
+
+@click.command()
+@click.argument('dist_name')
+@click.argument('edge')
+def main(dist_name, edge):
+    edges = defaultdict(int)
+    if dist_name == 'binomial':
+        dist = Dist.binomial
+        lam = 1
+    elif dist_name == 'geometric':
+        dist = Dist.geometric
+        lam = 1.5
+    else:
+        raise ValueError("Wrong dist argument")
+
+    if edge == 'loop':
+        count = count_loops
+    elif edge == 'parallel':
+        count = count_parallel_edges
+        lam **= 2
+    else:
+        raise ValueError('Wrong edge argument')
+
+    for _ in range(1000):
+        g = gen_fixed_degree_graph(dist, 250)
+        edges[count(g)] += 1
+
+    x = np.array(list(edges.keys()))
+    y = np.array(list(edges.values()))
+    y = y / np.sum(y)
+    p_y = poisson.pmf(x, lam)
+    plt.style.use('ggplot')
+    experimental = plt.scatter(x, y)
+    theoretical = plt.scatter(x, p_y, c='r', marker='+')
+    plt.legend((experimental, theoretical), ('Experimental', 'Theoretical'))
+    plt.title(edge + ' ' + dist_name)
+    plt.xlabel('N')
+    plt.ylabel('Probability')
+    plt.show()
+
+if __name__ == '__main__':
+    main()
