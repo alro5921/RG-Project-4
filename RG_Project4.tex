@@ -42,7 +42,18 @@ Each step of the process removes 2 "degrees" from the degree list to form 1 edge
 \vspace{-2ex}
 \subsection{}
 \vspace{-2ex}
-With the first procedure, the probabilities of a degree being even are identical between all degrees. The second procedure generates an unrestricted $n-1$ sized degree list; each of these degrees will be even with exactly probability $p$, and their sum will be even with probability $1/2$ for large $n$. But the final restricted degree must match the parity of the unrestricted degrees' sum, so it'll be even with probability $1/2$ \textit{regardless of p}. So the probabilities of a degree being even are not neccesarily identical between all degrees, and thus the two procedures aren't equivalent. 
+With the first procedure, the probabilities of a degree being even are identical between all degrees. The second procedure generates an unrestricted $n-1$ sized degree list; each of these degrees will be even with exactly probability $p$, and their sum will be even with probability $1/2$ for large $n$. But the final restricted degree must match the parity of the unrestricted degrees' sum, so it'll be even with probability $1/2$ \textit{regardless of p}. So the probabilities of a degree being even are not neccesarily identical between all degrees, and thus the two procedures aren't equivalent.
+
+$$
+\begin{aligned}
+P(E_{n-1})&=P(d_1+...d_{n-1}=even)=P(d_1+...d_{n-1}=odd)=\frac{1}{2}\\
+P(d_1+...+d_n=even)&=P(d_n=even,d_1+...d_{n-1}=even)+P(d_n=odd,d_1+...d_{n-1}=odd)\\
+&=P(d_n=even)P(d_1+...d_{n-1}=even)+P(d_n=odd)P(d_1+...d_{n-1}=odd)\\
+&=\frac{1}{2}[P(d_n=even)+P(d_n=odd)]=\frac{1}{2}\cdot 1=\frac{1}{2}=P(E_n=even)
+\end{aligned}
+$$
+
+Since the overall probability of getting an even event after fixing $d_{n-1}$ (whose even/oddness is itself random, but equal in probability) is $\frac{1}{2}$, that means the procedures are equivalent.
 
 \vspace{-2ex}
 \subsection{} 
@@ -143,6 +154,6 @@ The counts of loops and parallel edges in a simple graph is zero, thus:
 
 For $d\sim Binomial(5,1/2)$, $P(simple)=p_1(0)\cdot p_1(0)=.367^2=.135$. Five experimental runs of 1K graphs yields $[.131,.12,.138,.118,.144]$ which agrees well with the theoretical result.
 
-For $d\sim Geometric(2/5)$, $P(simple)=p_{1.5}(0)\cdot p_{2.25}(0)=.0235$. Five experimental runs of 1K graphs yields $[.03,.026,.03, .025, .023]$. These results agree, however not their overall higher value. A higher $n$ may help, but was difficult because counting parallel edges in our algorithm is $O(n^2)$.
+For $d\sim Geometric(2/5)$, $P(simple)=p_{1.5}(0)\cdot p_{2.25}(0)=.0235$. Five experimental runs of 1K graphs yields $[.03,.026,.03, .025, .023]$. These results generally agre, but not that the mean of the runs is slightly high. To alleviate this, a higher $n$ may help, but was difficult because counting parallel edges in our algorithm is $O(n^2)$ and took a long time to ran for anything significantly above $n=250$.
 
 \end{document}
