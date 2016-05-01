@@ -56,10 +56,15 @@ def count_parallel_edges(g):
     return parallel
 
 
-@click.command()
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
 @click.argument('dist_name')
 @click.argument('edge')
-def main(dist_name, edge):
+def plot(dist_name, edge):
     edges = defaultdict(int)
     if dist_name == 'binomial':
         dist = Dist.binomial
@@ -95,5 +100,24 @@ def main(dist_name, edge):
     plt.ylabel('Probability')
     plt.show()
 
+
+@cli.command()
+@click.argument('dist_name')
+def simple(dist_name):
+    if dist_name == 'binomial':
+        dist = Dist.binomial
+    elif dist_name == 'geometric':
+        dist = Dist.geometric
+    else:
+        raise ValueError("Wrong dist argument")
+    simple_graphs = 0
+    edges = defaultdict(int)
+    for _ in range(1000):
+        g = gen_fixed_degree_graph(dist, 250)
+        if count_loops(g) == 0 and count_parallel_edges(g) == 0:
+            simple_graphs += 1
+    print(simple_graphs / 1000)
+
+
 if __name__ == '__main__':
-    main()
+    cli()
